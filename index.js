@@ -15,17 +15,19 @@ bot.on('channel_post', async (msg) => {
 
   if (text && text.includes('soundcloud.com')) {
     try {
-      // Очищаємо посилання від абсолютно всіх невидимих символів та переносу рядків
+      // Очищаємо посилання від пробілів та невидимого сміття
       const cleanUrl = text.replace(/\s+/g, '').trim();
-      const audioUrl = `https://scdlbot.com{encodeURIComponent(cleanUrl)}`;
+      
+      // Формуємо чистий URL без примусового encode всього хоста
+      const audioUrl = `https://scdlbot.com{cleanUrl}`;
 
-      // Надсилаємо чистий MP3-файл у твій канал
+      // Надсилаємо MP3-файл
       await bot.sendAudio(chatId, audioUrl, {
         title: 'SoundCloud Track',
         performer: 'My Music Bot'
       });
 
-      // Миттєво видаляємо сире посилання з каналу, щоб було чисто
+      // Видаляємо текстове посилання
       await bot.deleteMessage(chatId, msg.message_id);
 
     } catch (error) {
@@ -35,4 +37,3 @@ bot.on('channel_post', async (msg) => {
 });
 
 console.log('Бот успішно запущений!');
-
