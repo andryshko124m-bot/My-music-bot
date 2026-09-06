@@ -4,7 +4,6 @@ const http = require('http');
 const token = '8877905784:AAHYJm_i5gSG-Twj3PmMw_HENu79Rr6ITVM'; 
 const bot = new TelegramBot(token, { polling: true });
 
-// Створюємо простий сервер, щоб Render не ламався і не шукав порти
 http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('Bot is running\n');
@@ -16,8 +15,8 @@ bot.on('channel_post', async (msg) => {
 
   if (text && text.includes('soundcloud.com')) {
     try {
-      // Очищаємо посилання від зайвих пробілів та символів, щоб Telegram не ламався
-      const cleanUrl = text.trim();
+      // Очищаємо посилання від абсолютно всіх невидимих символів та переносу рядків
+      const cleanUrl = text.replace(/\s+/g, '').trim();
       const audioUrl = `https://scdlbot.com{encodeURIComponent(cleanUrl)}`;
 
       // Надсилаємо чистий MP3-файл у твій канал
@@ -36,3 +35,4 @@ bot.on('channel_post', async (msg) => {
 });
 
 console.log('Бот успішно запущений!');
+
